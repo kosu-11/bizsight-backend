@@ -9,6 +9,14 @@ import fs from "fs";
 
 const app = express();
 
+/* 🔥 ADD 1: Render PORT */
+const PORT = process.env.PORT || 8000;
+
+/* 🔥 ADD 2: uploads folder auto create */
+if (!fs.existsSync("uploads")) {
+  fs.mkdirSync("uploads");
+}
+
 app.use(cors());
 app.use(express.json());
 
@@ -51,7 +59,6 @@ app.post("/api/ai/insights", async (req, res) => {
       return res.json({ insights: "⚠ No data available" });
     }
 
-    /* 🔥 GENERIC PROMPT (MAIN UPGRADE) */
     const prompt = `
 You are a smart data analyst AI.
 
@@ -104,7 +111,7 @@ ${JSON.stringify(data.slice(0, 30))}
       return res.json({ insights: aiText });
     }
 
-    /* 🔥 FALLBACK (SMART GENERIC) */
+    /* 🔥 FALLBACK */
 
     try {
       const sample = data[0];
@@ -147,6 +154,7 @@ ${JSON.stringify(data.slice(0, 30))}
 
 /* ================= SERVER ================= */
 
-app.listen(8000, () => {
-  console.log("Server running on port 8000 🔥");
+/* 🔥 CHANGE ONLY THIS LINE */
+app.listen(PORT, () => {
+  console.log("Server running on port " + PORT + " 🔥");
 });
